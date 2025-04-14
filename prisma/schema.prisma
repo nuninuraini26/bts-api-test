@@ -1,0 +1,46 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model accounts {
+  id                Int     @id @default(uuid())
+  userId            Int
+  type              String  
+  provider          String  
+  providerAccountId String  
+  refresh_token     String?
+  access_token      String?
+  expires_at        BigInt?
+  id_token          String?
+  scope             String?
+  session_state     String?
+  token_type        String?
+}
+
+model sessions {
+  id           Int      @id @default(uuid())
+  userId       Int
+  expires      DateTime @db.Timestamptz(6)
+  sessionToken String   
+}
+
+model users {
+  id            Int       @id @default(uuid())
+  username String
+  password String
+  is_active Boolean
+}
+
+model verification_token {
+  identifier String
+  expires    DateTime @db.Timestamptz(6)
+  token      String
+
+  @@id([identifier, token])
+}
